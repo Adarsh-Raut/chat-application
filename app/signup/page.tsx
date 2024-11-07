@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { Eye, EyeOff } from "lucide-react";
 import GoogleSVG from "../../public/google-icon.svg";
 
@@ -12,9 +11,20 @@ export default function Component() {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle sign in logic here
+    const response = await fetch("/api/user/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email,
+        username: userName,
+        password,
+      }),
+    });
+    console.log(response);
   };
 
   return (
@@ -88,7 +98,7 @@ export default function Component() {
               type="submit"
               className="w-full bg-white text-gray-900 rounded-lg px-4 py-3 font-medium hover:bg-white/90 transition-colors"
             >
-              Sign in
+              Sign up
             </button>
 
             <button
@@ -96,17 +106,17 @@ export default function Component() {
               className="w-full bg-gray-700/50 text-white rounded-lg px-4 py-3 font-medium hover:bg-gray-700/70 transition-colors flex items-center justify-center gap-2"
             >
               <Image src={GoogleSVG} alt="Google" width={20} height={20} />
-              Sign in with Google
+              Sign ip with Google
             </button>
           </form>
 
           {/* Sign up link */}
-          <p className="text-gray-400 text-sm text-center mt-6">
+          {/* <p className="text-gray-400 text-sm text-center mt-6">
             {"Don't have an account? "}
             <Link href="/signup" className="text-white hover:underline">
               Sign up, it's free!
             </Link>
-          </p>
+          </p> */}
         </div>
       </div>
     </div>
