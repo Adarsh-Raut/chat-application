@@ -2,14 +2,17 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Sparkle } from "lucide-react";
 import GoogleSVG from "../../public/google-icon.svg";
+import { useRouter } from "next/navigation";
 
 export default function Component() {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
+
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,12 +22,17 @@ export default function Component() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        email,
+        email: email,
         username: userName,
-        password,
+        password: password,
       }),
     });
     console.log(response);
+    if (response.ok) {
+      router.push("/signin");
+    } else {
+      console.log("Registration failed");
+    }
   };
 
   return (
@@ -44,7 +52,9 @@ export default function Component() {
           {/* Logo */}
           <div className="flex justify-center mb-8">
             <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center">
-              <div className="w-6 h-6 text-white rotate-45">✦</div>
+              <div className="w-6 h-6 text-white rotate-45">
+                <Sparkle />
+              </div>
             </div>
           </div>
 
@@ -99,14 +109,6 @@ export default function Component() {
               className="w-full bg-white text-gray-900 rounded-lg px-4 py-3 font-medium hover:bg-white/90 transition-colors"
             >
               Sign up
-            </button>
-
-            <button
-              type="button"
-              className="w-full bg-gray-700/50 text-white rounded-lg px-4 py-3 font-medium hover:bg-gray-700/70 transition-colors flex items-center justify-center gap-2"
-            >
-              <Image src={GoogleSVG} alt="Google" width={20} height={20} />
-              Sign ip with Google
             </button>
           </form>
 

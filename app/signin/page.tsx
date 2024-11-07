@@ -3,18 +3,41 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Sparkle } from "lucide-react";
 import GoogleSVG from "../../public/google-icon.svg";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export default function Component() {
   const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState("");
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const router = useRouter();
+
+  const handleSignIn = async (provider: string) => {
+    try {
+      const response = await signIn(provider, { redirect: false });
+      console.log(response);
+      router.push("/");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle sign in logic here
+    try {
+      const signInData = await signIn("credentials", {
+        username: userName,
+        password: password,
+        redirect: false,
+      });
+      console.log(signInData);
+      router.push("/");
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -34,7 +57,9 @@ export default function Component() {
           {/* Logo */}
           <div className="flex justify-center mb-8">
             <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center">
-              <div className="w-6 h-6 text-white rotate-45">✦</div>
+              <div className="w-6 h-6 text-white rotate-45">
+                <Sparkle />
+              </div>
             </div>
           </div>
 
@@ -45,7 +70,7 @@ export default function Component() {
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
+            {/* <div>
               <input
                 type="email"
                 placeholder="Email"
@@ -54,8 +79,8 @@ export default function Component() {
                 className="w-full bg-gray-700/50 text-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/20"
                 required
               />
-            </div>
-            <div className="relative">
+            </div> */}
+            <div>
               <input
                 type="userName"
                 placeholder="User Name"
@@ -92,6 +117,7 @@ export default function Component() {
             </button>
 
             <button
+              onClick={() => handleSignIn("google")}
               type="button"
               className="w-full bg-gray-700/50 text-white rounded-lg px-4 py-3 font-medium hover:bg-gray-700/70 transition-colors flex items-center justify-center gap-2"
             >

@@ -1,12 +1,11 @@
 import React from "react";
-import SignIn from "./components/sign-in";
 
 type Props = {};
 
 function Home({}: Props) {
   return (
     <div>
-      <SignIn />
+      <h1>Home</h1>
     </div>
   );
 }
