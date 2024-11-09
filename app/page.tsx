@@ -1,12 +1,15 @@
 import React from "react";
+import CreateUser from "./components/CreateUser";
+import { Toaster } from "react-hot-toast";
 
 type Props = {};
 
 function Home({}: Props) {
   return (
-    <div>
-      <h1>Home</h1>
-    </div>
+    <>
+      <CreateUser />
+      <Toaster position="top-right" />
+    </>
   );
 }
 

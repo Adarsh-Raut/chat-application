@@ -14,43 +14,43 @@ datasource db {
 }
 
 model User {
-  id         Int       @id @default(autoincrement())
-  username   String    @unique
-  email      String    @unique
-  password   String    // Store hashed password here
-  createdAt  DateTime  @default(now())
-  messages   Message[] // Messages sent by the user
-  chatRooms  UserChatRoom[] // Relationship through the join table
+  id        Int            @id @default(autoincrement())
+  username  String         @unique
+  // email      String    @unique
+  // password   String    // Store hashed password here
+  createdAt DateTime       @default(now())
+  messages  Message[] // Messages sent by the user
+  chatRooms UserChatRoom[] // Relationship through the join table
 
   // Additional fields like profile picture or status can be added here
 }
 
 model ChatRoom {
-  id         Int       @id @default(autoincrement())
-  name       String
-  createdAt  DateTime  @default(now())
-  users      UserChatRoom[] // Relationship through the join table
-  messages   Message[]
+  id        Int            @id @default(autoincrement())
+  name      String
+  createdAt DateTime       @default(now())
+  users     UserChatRoom[] // Relationship through the join table
+  messages  Message[]
 
   // Optional: fields like description or last activity timestamp can be added
 }
 
 model Message {
-  id         Int       @id @default(autoincrement())
+  id         Int      @id @default(autoincrement())
   content    String
-  timestamp  DateTime  @default(now())
-  userId     Int       // ID of the user who sent the message
-  chatRoomId Int       // ID of the chat room the message belongs to
-  user       User      @relation(fields: [userId], references: [id])
-  chatRoom   ChatRoom  @relation(fields: [chatRoomId], references: [id])
+  timestamp  DateTime @default(now())
+  userId     Int // ID of the user who sent the message
+  chatRoomId Int // ID of the chat room the message belongs to
+  user       User     @relation(fields: [userId], references: [id])
+  chatRoom   ChatRoom @relation(fields: [chatRoomId], references: [id])
 }
 
 /// Join table for the many-to-many relation between User and ChatRoom
 model UserChatRoom {
   userId     Int
   chatRoomId Int
-  user       User      @relation(fields: [userId], references: [id])
-  chatRoom   ChatRoom  @relation(fields: [chatRoomId], references: [id])
+  user       User     @relation(fields: [userId], references: [id])
+  chatRoom   ChatRoom @relation(fields: [chatRoomId], references: [id])
 
   @@id([userId, chatRoomId])
   @@unique([userId, chatRoomId])
