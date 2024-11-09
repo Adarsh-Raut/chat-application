@@ -30,9 +30,9 @@ export default function CreateUser() {
       const data = await response.json();
 
       console.log(data);
-      if (response.status === 201) {
+      if (data.status === 201) {
         toast.success("User created successfully");
-      } else {
+      } else if (data.status === 400) {
         toast.error(data.message);
       }
     } catch (error) {
